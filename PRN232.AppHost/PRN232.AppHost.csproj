@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApiGateway\ApiGateway.csproj" />
     <ProjectReference Include="..\Slot2API\Slot2API.csproj" />
     <ProjectReference Include="..\WebMVC\WebMVC.csproj" />
   </ItemGroup>

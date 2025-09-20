@@ -1,6 +1,0 @@
-@Slot2API_HostAddress = http://localhost:5137
-
-GET {{Slot2API_HostAddress}}/Api/User
-Accept: application/json
-
-###
