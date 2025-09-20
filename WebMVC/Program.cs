@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IUserApiClient, UserApiClient>(c =>
 {
     // link trong API project
-    c.BaseAddress = new Uri("https://localhost:8080/");
+    c.BaseAddress = new Uri(builder.Configuration.GetConnectionString("BaseUrl"));
 });
 var app = builder.Build();
 

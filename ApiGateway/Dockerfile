@@ -12,20 +12,20 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Slot2API/Slot2API.csproj", "Slot2API/"]
+COPY ["ApiGateway/ApiGateway.csproj", "ApiGateway/"]
 COPY ["PRN232.ServiceDefaults/PRN232.ServiceDefaults.csproj", "PRN232.ServiceDefaults/"]
-RUN dotnet restore "./Slot2API/Slot2API.csproj"
+RUN dotnet restore "./ApiGateway/ApiGateway.csproj"
 COPY . .
-WORKDIR "/src/Slot2API"
-RUN dotnet build "./Slot2API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/ApiGateway"
+RUN dotnet build "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Slot2API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Slot2API.dll"]
+ENTRYPOINT ["dotnet", "ApiGateway.dll"]

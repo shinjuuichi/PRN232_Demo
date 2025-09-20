@@ -20,6 +20,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<Slot2APIContext>();
+    await context.Database.MigrateAsync();
+}
+
 app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
