@@ -17,7 +17,7 @@ jobs:
     - name: Build the Docker image
       run: |
            docker build . --file ApiGateway/Dockerfile --tag api-gateway:$(date +%s)
-           docker build . --file Slot2API/Dockerfile --tag slot2-api:$(date +%s)
+           docker build . --file Slot2API/Dockerfile --tag web-api:$(date +%s)
            docker build . --file WebMVC/Dockerfile --tag web-mvc:$(date +%s)
       
       
