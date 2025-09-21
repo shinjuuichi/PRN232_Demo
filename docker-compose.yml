@@ -1,43 +1,59 @@
 services:
-  apigateway:
-    image: ${DOCKER_REGISTRY-}apigateway
-    build:
-      context: .
-      dockerfile: ApiGateway/Dockerfile
-    networks:
-      - microservices-network
-
-  webapi:
-    image: ${DOCKER_REGISTRY-}web-api
-    build:
-      context: .
-      dockerfile: Slot2API/Dockerfile
-    networks:
-      - microservices-network
-
-  webmvc:
-    image: ${DOCKER_REGISTRY-}web-mvc
-    build:
-      context: .
-      dockerfile: WebMVC/Dockerfile
-    networks:
-     - microservices-network
-
-  mssql:
+  sqlserver:
+    container_name: sqlserver
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "Okelabubu@123"
       ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Shinjuuichi@11"  
     volumes:
       - mssql_data:/var/opt/mssql
+    healthcheck:
+      test: ['CMD-SHELL', "bash -c '</dev/tcp/127.0.0.1/1433'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - microservices-network
+
+  webapi:
+    container_name: webapi
+    image: ${DOCKER_REGISTRY-}web-api
+    build:
+      context: .
+      dockerfile: Slot2API/Dockerfile
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  apigateway:
+    container_name: apigateway
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    depends_on:
+      - webapi
+    networks:
+      - microservices-network
+
+  webmvc:
+    container_name: webmvc
+    image: ${DOCKER_REGISTRY-}web-mvc
+    build:
+      context: .
+      dockerfile: WebMVC/Dockerfile
+    depends_on:
+        - apigateway
     networks:
       - microservices-network
 
 volumes:
-    mssql_data:
+  mssql_data:
 
 networks:
-    microservices-network:
-        driver: bridge
+  microservices-network:
+    driver: bridge

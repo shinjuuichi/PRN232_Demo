@@ -11,7 +11,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       
-      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=DemoSlotTwoDb;User Id=sa;Password=Okelabubu@123;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=DemoOk;User ID=sa;Password=Shinjuuichi@11;TrustServerCertificate=True
     ports:
       - "8001:8080"
 
@@ -20,6 +20,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
 
-      - ConnectionStrings__BaseUrl=http://webapi:8080
+      - ConnectionStrings__BaseUrl=http://apigateway:8080
     ports:
       - "8002:8080"
